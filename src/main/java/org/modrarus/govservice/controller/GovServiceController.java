@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -67,7 +68,7 @@ public class GovServiceController {
 	 */
 	@PostMapping("/api/{serviceId}/request")
 	public void requestService(@PathVariable("serviceId") final String _id,
-			final GovServiceRequestData _requestData) {
+			@RequestBody final GovServiceRequestData _requestData) {
 		GovService service = serviceRepository.findById(_id)
 				.orElseThrow(() -> new GovServiceNotExistException(_id));
 		
