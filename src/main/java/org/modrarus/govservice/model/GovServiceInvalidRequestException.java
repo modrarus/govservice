@@ -8,7 +8,7 @@ import com.google.gson.annotations.Expose;
 /**
  * Невалидный запрос предоставления услуги
  */
-public class GovServiceInvalidRequestException extends RuntimeException {
+public class GovServiceInvalidRequestException extends AGovServiceException {
 	private static final long serialVersionUID = -4211098686693324026L;
 	/**
 	 * Список незаполненных обязательных полей
@@ -18,10 +18,10 @@ public class GovServiceInvalidRequestException extends RuntimeException {
 	
 	/**
 	 * Основной конструктор
-	 * @param _cause Сообщение о ошибке данных
+	 * @param _error Сообщение о ошибке данных
 	 */
-	public GovServiceInvalidRequestException(final String _cause) {
-		super(_cause);
+	public GovServiceInvalidRequestException(final String _error) {
+		super(_error);
 	}
 	
 	/**

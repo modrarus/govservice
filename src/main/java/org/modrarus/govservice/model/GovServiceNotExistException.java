@@ -3,7 +3,7 @@ package org.modrarus.govservice.model;
 /**
  * Услуга не существует
  */
-public class GovServiceNotExistException extends RuntimeException {
+public class GovServiceNotExistException extends AGovServiceException {
 	private static final long serialVersionUID = 6183301773614480325L;
 	
 	/**

@@ -3,6 +3,7 @@ package org.modrarus.govservice.controller;
 import java.util.Collection;
 import java.util.List;
 
+import org.modrarus.govservice.model.AGovServiceException;
 import org.modrarus.govservice.model.GovService;
 import org.modrarus.govservice.model.GovServiceNotExistException;
 import org.modrarus.govservice.model.GovServiceRequest;
@@ -11,6 +12,9 @@ import org.modrarus.govservice.model.GovServiceRequestSchemaField;
 import org.modrarus.govservice.model.repository.GovServiceRepository;
 import org.modrarus.govservice.model.repository.GovServiceRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,7 +33,6 @@ public class GovServiceController {
 	/**
 	 * Репозиторий для работы с заявками
 	 */
-	@SuppressWarnings("unused")
 	private GovServiceRequestRepository requestRepository;
 	
 	@Autowired
@@ -75,5 +78,16 @@ public class GovServiceController {
 		GovServiceRequest request = new GovServiceRequest(service, _requestData);
 		
 		requestRepository.save(request);
+	}
+	
+	/**
+	 * Обработка отсутствия запрошенной услуги
+	 * @param _exception Исключение
+	 * @return Ответ
+	 */
+	@ExceptionHandler(AGovServiceException.class)
+	public ResponseEntity<AGovServiceException> handleGovServiceNotExistException(
+			final AGovServiceException _exception) {
+		return new ResponseEntity<AGovServiceException>(_exception, HttpStatus.BAD_REQUEST);
 	}
 }
