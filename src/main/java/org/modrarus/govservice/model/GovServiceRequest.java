@@ -10,7 +10,7 @@ import com.google.gson.annotations.Expose;
 /**
  * Заявка на государственную услугу
  */
-@Document("GovServiceRequest")
+@Document("ServiceRequest")
 public class GovServiceRequest {
 	/**
 	 * Идентификатор
@@ -33,6 +33,12 @@ public class GovServiceRequest {
 	 */
 	@Expose
 	private GovServiceRequestState state = GovServiceRequestState.CREATED;
+	
+	/**
+	 * Пустой конструктор, необходим для драйвера mongodb
+	 */
+	@SuppressWarnings("unused")
+	private GovServiceRequest() {}
 	
 	/**
 	 * Построение нового запроса услуги

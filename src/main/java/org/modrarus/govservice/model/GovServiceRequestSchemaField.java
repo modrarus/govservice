@@ -27,6 +27,12 @@ public class GovServiceRequestSchemaField {
 	private boolean required;
 	
 	/**
+	 * Пустой конструктор, необходим для mongodb
+	 */
+	@SuppressWarnings("unused")
+	private GovServiceRequestSchemaField() {}
+	
+	/**
 	 * Конструктор нового поля
 	 * @param _name    Имя
 	 * @param _disName Отображаемое имя

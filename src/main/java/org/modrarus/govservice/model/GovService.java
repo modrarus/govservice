@@ -10,7 +10,7 @@ import com.google.gson.annotations.Expose;
 /**
  * Описание госуслуги
  */
-@Document("GovService")
+@Document("Service")
 public class GovService {
 	/**
 	 * Идентификатор
