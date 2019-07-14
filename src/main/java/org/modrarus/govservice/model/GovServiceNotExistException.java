@@ -1,4 +1,4 @@
-package org.modrarus.govservice.controller;
+package org.modrarus.govservice.model;
 
 /**
  * Услуга не существует

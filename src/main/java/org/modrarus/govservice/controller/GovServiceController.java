@@ -4,12 +4,16 @@ import java.util.Collection;
 import java.util.List;
 
 import org.modrarus.govservice.model.GovService;
+import org.modrarus.govservice.model.GovServiceNotExistException;
+import org.modrarus.govservice.model.GovServiceRequest;
+import org.modrarus.govservice.model.GovServiceRequestData;
 import org.modrarus.govservice.model.GovServiceRequestSchemaField;
 import org.modrarus.govservice.model.repository.GovServiceRepository;
 import org.modrarus.govservice.model.repository.GovServiceRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -48,11 +52,27 @@ public class GovServiceController {
 	 * @param _id Идентификатор услуги
 	 * @return Схема
 	 */
-	@GetMapping("/api/{serviceName}/schema")
+	@GetMapping("/api/{serviceId}/schema")
 	public List<GovServiceRequestSchemaField> getServiceSchema(
-			@PathVariable("serviceName") final String _id) {
+			@PathVariable("serviceId") final String _id) {
 		return serviceRepository.findById(_id)
 				.orElseThrow(() -> new GovServiceNotExistException(_id))
 				.getRequestSchema();
+	}
+	
+	/**
+	 * Построение запроса услуги
+	 * @param _id Идентификатор услуги
+	 * @param _requestData Данные по услуге
+	 */
+	@PostMapping("/api/{serviceId}/request")
+	public void requestService(@PathVariable("serviceId") final String _id,
+			final GovServiceRequestData _requestData) {
+		GovService service = serviceRepository.findById(_id)
+				.orElseThrow(() -> new GovServiceNotExistException(_id));
+		
+		GovServiceRequest request = new GovServiceRequest(service, _requestData);
+		
+		requestRepository.save(request);
 	}
 }

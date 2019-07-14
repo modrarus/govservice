@@ -5,8 +5,6 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.lang.NonNull;
 
-import com.google.gson.annotations.Expose;
-
 /**
  * Заявка на государственную услугу
  */
@@ -16,7 +14,6 @@ public class GovServiceRequest {
 	 * Идентификатор
 	 */
 	@Id
-	@Expose
 	private String id;
 	/**
 	 * Услуга
@@ -26,12 +23,10 @@ public class GovServiceRequest {
 	/**
 	 * Основные данные
 	 */
-	@Expose
 	private GovServiceRequestData data;
 	/**
 	 * Статус услуги
 	 */
-	@Expose
 	private GovServiceRequestState state = GovServiceRequestState.CREATED;
 	
 	/**
