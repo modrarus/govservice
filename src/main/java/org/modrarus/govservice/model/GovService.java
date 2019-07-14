@@ -3,12 +3,14 @@ package org.modrarus.govservice.model;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.google.gson.annotations.Expose;
 
 /**
  * Описание госуслуги
  */
+@Document("GovService")
 public class GovService {
 	/**
 	 * Идентификатор

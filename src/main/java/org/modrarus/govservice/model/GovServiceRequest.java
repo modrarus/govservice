@@ -2,29 +2,36 @@ package org.modrarus.govservice.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.lang.NonNull;
+
+import com.google.gson.annotations.Expose;
 
 /**
  * Заявка на государственную услугу
  */
+@Document("GovServiceRequest")
 public class GovServiceRequest {
 	/**
 	 * Идентификатор
 	 */
 	@Id
+	@Expose
 	private String id;
 	/**
 	 * Услуга
 	 */
-	@DBRef
+	@DBRef(lazy = true)
 	private GovService service;
 	/**
 	 * Основные данные
 	 */
+	@Expose
 	private GovServiceRequestData data;
 	/**
 	 * Статус услуги
 	 */
+	@Expose
 	private GovServiceRequestState state = GovServiceRequestState.CREATED;
 	
 	/**
