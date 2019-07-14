@@ -41,8 +41,12 @@ public class GovServiceRequest {
 	 * @param _data    Данные по улсуге
 	 */
 	public GovServiceRequest(final GovService _service, final GovServiceRequestData _data) {
+		if (_service == null) {
+			throw new GovServiceInvalidRequestException(
+					"Ошибка выполнения запроса на предоставление государственной услуги. Услуга не указана.");
+		}
 		service = _service;
-		data    = _data;
+		parseDataBySchema(data);
 	}
 	
 	/**
@@ -83,5 +87,30 @@ public class GovServiceRequest {
 	 */
 	public GovService getService() {
 		return service;
+	}
+	
+	/**
+	 * Построение данных запроса по схеме, соответствующей услуге
+	 * @param _data Исходные данные для запроса
+	 */
+	private void parseDataBySchema(final GovServiceRequestData _data) {
+		GovServiceInvalidRequestException error = new GovServiceInvalidRequestException(
+				"Ошибка выполнения запроса на предоставление государственной услуги. Заявка не содержит обязательных полей");
+		if (_data == null) {
+			for (GovServiceRequestSchemaField field : service.getRequestSchema()) {
+				error.addEmptyRequiredField(field.getName());
+			}
+			throw error;
+		}
+		
+		data = new GovServiceRequestData();
+		for (GovServiceRequestSchemaField field : service.getRequestSchema()) {
+			String value = _data.get(field.getName());
+			if (value != null && !value.trim().isEmpty()) {
+				data.put(field.getName(), value.trim());
+			} else if (field.isRequired()) {
+				error.addEmptyRequiredField(field.getName());
+			}
+		}
 	}
 }
