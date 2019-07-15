@@ -1,6 +1,7 @@
 package org.modrarus.govservice.controller;
 
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.modrarus.govservice.model.AGovServiceException;
@@ -89,5 +90,48 @@ public class GovServiceController {
 	public ResponseEntity<AGovServiceException> handleGovServiceNotExistException(
 			final AGovServiceException _exception) {
 		return new ResponseEntity<AGovServiceException>(_exception, HttpStatus.BAD_REQUEST);
+	}
+	
+	/**
+	 * Инициализация базы набором услуг по умолчанию
+	 */
+	@PostMapping("/api/internal/init")
+	public ResponseEntity<String> initServicesList() {
+		//Очистка существующей базы
+		serviceRepository.deleteAll();
+		requestRepository.deleteAll();
+		
+		List<GovServiceRequestSchemaField> fields = new LinkedList<GovServiceRequestSchemaField>();
+		fields.add(new GovServiceRequestSchemaField("ITN", "ИНН", "Индивидуальный номер налогоплательщика", true));
+		
+		serviceRepository.save(new GovService("Проверка налоговых задолженностей",
+				"Проверка налоговых задолженностей",
+				fields));
+		
+		fields = new LinkedList<GovServiceRequestSchemaField>();
+		fields.add(new GovServiceRequestSchemaField("carLicense",
+				"Автомобильный номер", "Автомобильный номер", true));
+		
+		serviceRepository.save(new GovService("Проверка штрафов ГИБДД",
+				"Проверка штрафов ГИБДД",
+				fields));
+		
+		fields = new LinkedList<GovServiceRequestSchemaField>();
+		fields.add(new GovServiceRequestSchemaField("passportSeries",
+				"Серия старого паспорта", "Серия располагается в верхней части первой страницы паспорта и представляет собой 4 цифры", true));
+		fields.add(new GovServiceRequestSchemaField("passportNumber",
+				"Номер старого паспорта", "Номер располагается в верхней части первой страницы паспорта и представляет собой 6 цифр", true));
+		fields.add(new GovServiceRequestSchemaField("name",
+				"Имя", "Имя", true));
+		fields.add(new GovServiceRequestSchemaField("surname",
+				"Фамилия", "Фамилия", true));
+		fields.add(new GovServiceRequestSchemaField("patronymic",
+				"Отчество", "Отчество", true));
+		
+		serviceRepository.save(new GovService("Замена паспорта",
+				"Замена паспорта осуществляется по истечении срока действия текущего паспорта",
+				fields));
+		
+		return new ResponseEntity<String>(HttpStatus.CREATED);
 	}
 }
