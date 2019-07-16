@@ -95,10 +95,10 @@ public class GovServiceRequest {
 	 */
 	private void parseDataBySchema(final GovServiceRequestData _data) {
 		GovServiceInvalidRequestException error = new GovServiceInvalidRequestException(
-				"Ошибка выполнения запроса на предоставление государственной услуги. Заявка не содержит обязательных полей");
+				"Ошибка выполнения запроса на предоставление государственной услуги. Заявка не содержит обязательных полей.");
 		if (_data == null) {
 			for (GovServiceRequestSchemaField field : service.getRequestSchema()) {
-				error.addEmptyRequiredField(field.getName());
+				error.addEmptyRequiredField(field);
 			}
 			throw error;
 		}
@@ -109,7 +109,7 @@ public class GovServiceRequest {
 			if (value != null && !value.trim().isEmpty()) {
 				data.put(field.getName(), value.trim());
 			} else if (field.isRequired()) {
-				error.addEmptyRequiredField(field.getName());
+				error.addEmptyRequiredField(field);
 			}
 		}
 		
