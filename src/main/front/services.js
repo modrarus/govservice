@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 class GovServices extends Component {
     constructor(props) {
@@ -10,17 +11,19 @@ class GovServices extends Component {
     componentDidMount() {
         this.setState({services : [], loading : true, error : null});
 
-        fetch('api/list')
-            .then(response => response.json())
-            .then(data => this.setState({services : data, loading : false, error : null}))
+        axios.get('api/list')
+            .then(data => this.setState({services : data.data, loading : false, error : null}))
+            .catch(error => console.log(error.data));
     }
     
     render() {
         if (this.state.loading == true) {
             return <p>Загрузка...</p>;
+        } else if (this.state.error != null) {
+            return <p>Ошибка загрузки списка услуг!</p>
         }
 
-        const govServicesList = this.state.services.map(govService =>{
+        const govServicesList = this.state.services.map(govService => {
             return <GovService service={govService} />
         })
         return <table>
@@ -38,10 +41,6 @@ class GovServices extends Component {
 }
 
 class GovService extends Component {
-    request() {
-        alert(this.props.service.id);
-    }
-
     render() {
         return (<tr>
             <td>{this.props.service.name}</td>

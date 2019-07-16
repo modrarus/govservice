@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 class GovServiceRequest extends Component {
     constructor(props) {
@@ -13,17 +14,8 @@ class GovServiceRequest extends Component {
         event.preventDefault();
         const requestData = this.state.values;
 
-        fetch(`/api/${this.props.match.params.id}/request`, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(requestData),
-            credentials: 'include'
-        });
-
-        alert("submited");
+        axios.post(`/api/${this.props.match.params.id}/request`, requestData)
+            .then(data => console.log(data));
     }
 
     handleInputChange(event) {
@@ -35,9 +27,9 @@ class GovServiceRequest extends Component {
     componentDidMount() {
         this.setState({schema : [], values:{}, loading : true, error : null});
         
-        fetch(`/api/${this.props.match.params.id}/schema`)
-            .then(response => response.json())
-            .then(data => this.setState({schema : data, values:{}, loading : false, error : null}))
+        axios.get(`/api/${this.props.match.params.id}/schema`)
+            .then(data => this.setState({schema : data.data, values:{}, loading : false, error : null}))
+            .catch(err => this.setState({schema : [], values:{}, loading : false, error : err.response.data}));
     }
 
     render () {
