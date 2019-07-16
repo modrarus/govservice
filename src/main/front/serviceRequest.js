@@ -18,7 +18,7 @@ class GovServiceRequest extends Component {
         const schema = this.state.schema;
         axios.post(`/api/${this.props.match.params.id}/request`, requestData)
             .then(data => {
-                alert('Запроу услуги успешно принят.');
+                alert('Запрос услуги успешно принят.');
                 router.push("/");
             })
             .catch(err => {
