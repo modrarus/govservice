@@ -1,9 +1,10 @@
 import React, {Component} from "react";
 import ReactDOM from "react-dom";
+import GovServices from "./services";
 
 class App extends Component {
 	render() {
-		return <p>Hello, world!</p>
+		return <GovServices/>
 	}
 }
 
