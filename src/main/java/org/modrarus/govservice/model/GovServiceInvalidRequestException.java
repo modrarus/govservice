@@ -14,7 +14,7 @@ public class GovServiceInvalidRequestException extends AGovServiceException {
 	 * Список незаполненных обязательных полей
 	 */
 	@Expose
-	private List<String> emptyRequiredFields;
+	private List<EmptyRequiredField> emptyRequiredFields;
 	
 	/**
 	 * Основной конструктор
@@ -28,11 +28,12 @@ public class GovServiceInvalidRequestException extends AGovServiceException {
 	 * Добавление информации о отсутствии обязательного поля
 	 * @param _field Поле
 	 */
-	public void addEmptyRequiredField(final String _field) {
+	public void addEmptyRequiredField(final GovServiceRequestSchemaField _field) {
 		if (emptyRequiredFields == null) {
-			emptyRequiredFields = new LinkedList<String>();
+			emptyRequiredFields = new LinkedList<EmptyRequiredField>();
 		}
-		emptyRequiredFields.add(_field);
+		emptyRequiredFields.add(
+				new EmptyRequiredField(_field.getName(), _field.getDisplayName()));
 	}
 	
 	/**
@@ -41,5 +42,31 @@ public class GovServiceInvalidRequestException extends AGovServiceException {
 	 */
 	public boolean hasEmptyRequiredFields() {
 		return emptyRequiredFields != null && !emptyRequiredFields.isEmpty();
+	}
+	
+	/**
+	 * Контейнер упрощенного описания незаполненного поля для простой обработки на фронтенде
+	 */
+	private static final class EmptyRequiredField {
+		/**
+		 * Имя поля
+		 */
+		@Expose
+		private String name;
+		/**
+		 * Отображаемое имя
+		 */
+		@Expose
+		private String displayName;
+		
+		/**
+		 * Базовый конструктор
+		 * @param _name Имя
+		 * @param _displayName Отображаемое имя
+		 */
+		private EmptyRequiredField(final String _name, final String _displayName) {
+			name = _name;
+			displayName = _displayName;
+		}
 	}
 }

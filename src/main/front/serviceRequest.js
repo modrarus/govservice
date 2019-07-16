@@ -22,7 +22,15 @@ class GovServiceRequest extends Component {
                 router.push("/");
             })
             .catch(err => {
-                alert(err.response.data.error);
+                let response = err.response.data.error;
+                if ('emptyRequiredFields' in err.response.data) {
+                    err.response.data.emptyRequiredFields.forEach(element => {
+                        response += ' "';
+                        response += element.displayName;
+                        response += '"';
+                    });
+                }
+                alert(response);
             });
     }
 
