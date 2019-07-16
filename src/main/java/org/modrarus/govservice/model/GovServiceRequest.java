@@ -46,7 +46,7 @@ public class GovServiceRequest {
 					"Ошибка выполнения запроса на предоставление государственной услуги. Услуга не указана.");
 		}
 		service = _service;
-		parseDataBySchema(data);
+		parseDataBySchema(_data);
 	}
 	
 	/**
@@ -111,6 +111,10 @@ public class GovServiceRequest {
 			} else if (field.isRequired()) {
 				error.addEmptyRequiredField(field.getName());
 			}
+		}
+		
+		if (error.hasEmptyRequiredFields()) {
+			throw error;
 		}
 	}
 }
