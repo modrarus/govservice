@@ -1,9 +1,10 @@
 import React, {Component} from "react";
+import { Link } from 'react-router-dom';
 
 class GovServices extends Component {
     constructor(props) {
         super(props);
-        this.state = {services : [], loading : false, error : null};
+        this.state = {services : [], loading : true, error : null};
     }
     
     componentDidMount() {
@@ -19,7 +20,7 @@ class GovServices extends Component {
             return <p>Загрузка...</p>;
         }
 
-        let govServicesList = this.state.services.map(govService =>{
+        const govServicesList = this.state.services.map(govService =>{
             return <GovService service={govService} />
         })
         return <table>
@@ -42,10 +43,11 @@ class GovService extends Component {
     }
 
     render() {
-        return <tr onClick={() => this.request()}>
+        return (<tr>
             <td>{this.props.service.name}</td>
             <td>{this.props.service.description}</td>
-        </tr>
+            <td><Link to={`/request/${this.props.service.id}`}>Запросить</Link></td>
+        </tr>)
     }
 }
 
