@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import axios from 'axios';
 
 class GovServiceRequest extends Component {
@@ -14,8 +14,16 @@ class GovServiceRequest extends Component {
         event.preventDefault();
         const requestData = this.state.values;
 
+        const router = this.props.history;
+        const schema = this.state.schema;
         axios.post(`/api/${this.props.match.params.id}/request`, requestData)
-            .then(data => console.log(data));
+            .then(data => {
+                alert('Запроу услуги успешно принят.');
+                router.push("/");
+            })
+            .catch(err => {
+                alert(err.response.data.error);
+            });
     }
 
     handleInputChange(event) {
@@ -27,9 +35,13 @@ class GovServiceRequest extends Component {
     componentDidMount() {
         this.setState({schema : [], values:{}, loading : true, error : null});
         
+        const router = this.props.history;
         axios.get(`/api/${this.props.match.params.id}/schema`)
             .then(data => this.setState({schema : data.data, values:{}, loading : false, error : null}))
-            .catch(err => this.setState({schema : [], values:{}, loading : false, error : err.response.data}));
+            .catch(function(err) {
+                alert('Ошибка получения запрошенной услуги. Вы будете перенаправлены на начальную страницу.');
+                router.push("/");
+            });
     }
 
     render () {
@@ -61,4 +73,4 @@ class GovServiceRequest extends Component {
     }
 }
 
-export default GovServiceRequest;
+export default withRouter(GovServiceRequest);
