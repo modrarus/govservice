@@ -1,23 +1,43 @@
 import React, {Component} from "react";
+import { Link } from 'react-router-dom';
 
 class GovServiceRequest extends Component {
     constructor(props) {
         super(props);
-        this.state = {fields : null, loading : true, error : null};
+        this.state = {schema : [], values : {}, loading : true, error : null};
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
     }
 
     handleSubmit(event) {
+        event.preventDefault();
+        const requestData = this.state.values;
+
+        fetch(`/api/${this.props.match.params.id}/request`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestData),
+            credentials: 'include'
+        });
+
         alert("submited");
     }
 
+    handleInputChange(event) {
+        let values = this.state.values;
+        values[event.target.name] = event.target.value;
+        this.setState({values : values});
+    }
+
     componentDidMount() {
-        this.state = {fields : null, loading : true, error : null};
+        this.setState({schema : [], values:{}, loading : true, error : null});
         
-        const requestComponent = this;
         fetch(`/api/${this.props.match.params.id}/schema`)
             .then(response => response.json())
-            .then(data => this.setState({fields : data, loading : false, error : null}))
+            .then(data => this.setState({schema : data, values:{}, loading : false, error : null}))
     }
 
     render () {
@@ -29,18 +49,22 @@ class GovServiceRequest extends Component {
             display: "block",
           };
 
-        const fields = this.state.fields.map(field => {
+        const fields = this.state.schema.map(field => {
             return <label style={labelStyle}>
                     {field.displayName}: <br />
-                    <input type="text" name={field.name} />
+                    <input type="text" name={field.name} onChange={this.handleInputChange}/>
                 </label>
         });
 
         return (
-            <form onSubmit={this.handleSubmit}>
-                {fields}
-                <input type="submit" value="Запросить услугу"/>
-            </form>
+            <div>
+                <Link to="/">К списку услуг</Link><br />
+
+                <form onSubmit={this.handleSubmit}>
+                    {fields}
+                    <input type="submit" value="Запросить услугу"/>
+                </form>
+            </div>
         )
     }
 }
