@@ -5,14 +5,14 @@ import axios from 'axios';
 class GovServices extends Component {
     constructor(props) {
         super(props);
-        this.state = {services : [], loading : true, error : null};
+        this.state = {services : [], loading : true};
     }
     
     componentDidMount() {
-        this.setState({services : [], loading : true, error : null});
+        this.setState({services : [], loading : true});
 
         axios.get('api/list')
-            .then(data => this.setState({services : data.data, loading : false, error : null}))
+            .then(data => this.setState({services : data.data, loading : false}))
             .catch(error => console.log(error.data));
     }
     

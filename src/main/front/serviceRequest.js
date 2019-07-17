@@ -5,7 +5,7 @@ import axios from 'axios';
 class GovServiceRequest extends Component {
     constructor(props) {
         super(props);
-        this.state = {schema : [], values : {}, loading : true, error : null};
+        this.state = {schema : [], values : {}, loading : true};
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
     }
@@ -41,11 +41,11 @@ class GovServiceRequest extends Component {
     }
 
     componentDidMount() {
-        this.setState({schema : [], values:{}, loading : true, error : null});
+        this.setState({schema : [], values:{}, loading : true});
         
         const router = this.props.history;
         axios.get(`/api/${this.props.match.params.id}/schema`)
-            .then(data => this.setState({schema : data.data, values:{}, loading : false, error : null}))
+            .then(data => this.setState({schema : data.data, values:{}, loading : false}))
             .catch(function(err) {
                 alert('Ошибка получения запрошенной услуги. Вы будете перенаправлены на начальную страницу.');
                 router.push("/");
