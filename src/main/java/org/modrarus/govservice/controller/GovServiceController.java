@@ -47,7 +47,7 @@ public class GovServiceController {
 	 * Получение списка всех услуг
 	 * @return Список услуг
 	 */
-	@GetMapping("/api/list")
+	@GetMapping(value = "/api/list", produces="application/json")
 	public Collection<GovService> getList() {
 		return serviceRepository.findAll();
 	}
@@ -57,7 +57,7 @@ public class GovServiceController {
 	 * @param _id Идентификатор услуги
 	 * @return Схема
 	 */
-	@GetMapping("/api/{serviceId}/schema")
+	@GetMapping(value = "/api/{serviceId}/schema", produces="application/json")
 	public List<GovServiceRequestSchemaField> getServiceSchema(
 			@PathVariable("serviceId") final String _id) {
 		return serviceRepository.findById(_id)
@@ -70,13 +70,13 @@ public class GovServiceController {
 	 * @param _id Идентификатор услуги
 	 * @param _requestData Данные по услуге
 	 */
-	@PostMapping("/api/{serviceId}/request")
+	@PostMapping(value = "/api/{serviceId}/request", consumes="application/json")
 	public void requestService(@PathVariable("serviceId") final String _id,
 			@RequestBody final GovServiceRequestData _requestData) {
-		GovService service = serviceRepository.findById(_id)
+		final GovService service = serviceRepository.findById(_id)
 				.orElseThrow(() -> new GovServiceNotExistException(_id));
 		
-		GovServiceRequest request = new GovServiceRequest(service, _requestData);
+		final GovServiceRequest request = new GovServiceRequest(service, _requestData);
 		
 		requestRepository.save(request);
 	}
